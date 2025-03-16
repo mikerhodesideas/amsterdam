@@ -1,0 +1,25 @@
+{
+  "name": "bta-slides",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "slidev build",
+    "dam": "slidev slides/dam.md",
+    "mc": "slidev slides/masterclass.md",
+    "dev": "slidev --open",
+    "export": "slidev export"
+  },
+  "dependencies": {
+    "@slidev/cli": "^51.1.2",
+    "@slidev/theme-bricks": "^0.25.0",
+    "@slidev/theme-default": "^0.25.0",
+    "@slidev/theme-seriph": "latest",
+    "@unocss/inspector": "^66.1.0-beta.5",
+    "duplexer": "0.1.2",
+    "duplexer2": "^0.1.4",
+    "gzip-size": "5.1.1",
+    "slidev-theme-neversink": "^0.3.6",
+    "tslib": "^2.8.1",
+    "vue": "^3.5.13"
+  }
+}
