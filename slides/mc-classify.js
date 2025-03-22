@@ -8,7 +8,8 @@ const CATEGORIES = {
     NAVIGATIONAL: 'Queries looking for a specific website or page',
     COMMERCIAL: 'Queries with buying intent',
     LOCAL: 'Queries related to local businesses or services',
-    QUESTION: 'Queries phrased as questions'
+    QUESTION: 'Queries phrased as questions',
+    OTHER: 'Other'
 };
 
 function main() {

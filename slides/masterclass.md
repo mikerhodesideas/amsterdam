@@ -28,6 +28,15 @@ color: dark
 # 1. Introduction & Overview
 
 ---
+layout: full
+color: white
+---
+
+<div class="flex items-center justify-center h-full">
+  <img src="/data-info.png" style="max-width: 85%;" />
+</div>
+
+---
 layout: side-title
 align: rm-lm
 color: indigo
@@ -44,9 +53,7 @@ color: indigo
 <br>
 **Goal for today:**
 <br>
-Introduce some 'lego blocks' that you can use to build your own tools
-<br>
-Mental Models, Code snippets, Prompts etc.
+Introduce some 'lego blocks' that you can use to build your own Tools, Mental Models, Code snippets, Prompts etc.
 
 ---
 layout: side-title
@@ -76,7 +83,7 @@ color: white
 ---
 
 <div class="flex items-center justify-center h-full">
-  <img src="/wk2-workflow.png" style="max-width: 110%;" />
+  <img src="/wk2-workflow.png" style="max-width: 100%;" />
 </div>
 
 ---
@@ -115,24 +122,17 @@ color: emerald
 # If we had more time, you'd create this (with AI)
 
 ::content::
-- Here's one I created for you
+- Here's one I created for you https://8020agent.com/slides
 - I'll give you the **mega prompt** so you can create this later
 <br>
 - Create a new blank sheet & enter the URL in the script (top row)
 - Run the script in your account using PREVIEW (see logs)
 - Check the data in the sheet
-<br>
-<br>
-
-**Suggested models**
-- Claude 3.7 Sonnet
-- GPT-o3-mini
 
 ---
 layout: section
 color: dark
 ---
-
 
 # 3. Google Sheets (for Scripts)
 
@@ -201,10 +201,9 @@ color: indigo
 
 ::content::
 - We'll use the OpenAI API to add 'thinking' to our script
-- In the interest of time, I'll give you the finished script
-- https://8020agent.com/slides
+- In the interest of time, I'll give you the finished classification script at https://8020agent.com/slides
 - Use https://8020agent.com/4Cs to get more sample code snippets 
-- Get your API Key from https://platform.openai.com/settings/organization/api-keys
+- Get your API Key from https://platform.openai.com/settings/organization/api-keys (you need to fund this with $5 min)
 
 ---
 layout: side-title
@@ -258,7 +257,7 @@ color: indigo
 - We're using Google Ads as the 'host' for our code
 - Google handles all the details of running it
 - We don't have to host/deploy/maintain any servers
-- We can use this pattern with pretty much any API call
+- We can use this pattern with pretty much any API call (eg slack, weather, etc)
 - Hint: Imagination is the only constraint here
 
 ---
@@ -321,5 +320,5 @@ color: indigo
 ::content::
 1. Practice writing code
 2. Build v1 of something new 
-3. Get on the waitlist of next BTA Workshop!
+3. Consider the next Build the Agent Workshop!
 4. Have fun building (it's addictive!)

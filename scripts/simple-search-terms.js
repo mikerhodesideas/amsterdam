@@ -1,4 +1,4 @@
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/19mdKDHyvutXxmgW3Pggry3nmJ7yQiICU1lMazMyKMPc/edit?gid=1773326724#gid=1773326724'; // Will create a new sheet if empty
+const SHEET_URL = ''; // Will create a new sheet if empty
 const TAB = 'Search Terms';
 
 function main() {

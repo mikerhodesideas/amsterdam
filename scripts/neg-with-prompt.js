@@ -12,6 +12,8 @@
  * 
  */
 
+
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1aEOcIYZ0pZN85yfJftN2AtzI_0Hrx23iGuYJpFoj1HQ/'
 const TAB_CAMPAIGN_NEGATIVES = 'Campaign Negatives';
 const TAB_ADGROUP_NEGATIVES = 'Ad Group Negatives';
 const TAB_SHARED_LISTS = 'Shared Neg. Lists';
@@ -20,15 +22,20 @@ const TAB_STATS = 'Negative Stats';
 
 function main() {
   // Create a new spreadsheet if none is provided
-  let ss;
-  try {
-    ss = SpreadsheetApp.create("Google Ads Negative Keywords Report");
-    let url = ss.getUrl();
-    Logger.log("New spreadsheet created: " + url);
-  } catch (e) {
-    Logger.log("Error creating spreadsheet: " + e);
-    return;
+  if (!SHEET_URL) {
+    let ss;
+    try {
+      ss = SpreadsheetApp.create("Google Ads Negative Keywords Report");
+      let url = ss.getUrl();
+      Logger.log("New spreadsheet created: " + url);
+    } catch (e) {
+      Logger.log("Error creating spreadsheet: " + e);
+      return;
+    }
+  } else {
+    ss = SpreadsheetApp.openByUrl(SHEET_URL);
   }
+  
   
   // Clear and prepare sheets
   prepareSheets(ss);

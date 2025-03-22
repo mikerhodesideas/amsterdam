@@ -14,6 +14,14 @@ neversink_slug: 'SSM25'
 Welcome to Amsterdam!
 
 ---
+layout: section
+color: dark
+---
+
+# LowLander Guest WiFi password: 
+# ilovelowlander
+
+---
 layout: full
 color: white
 ---
@@ -253,7 +261,7 @@ color: indigo
 <br>
 #### Other AI (not today):
 - For images: Midjourney, FAL
-- For audio: ElevenLabs
+- For audio: ElevenLabs, Sesame
 - For video: VEO2, Runway, Synthesia
 
 ---
@@ -337,6 +345,9 @@ color: emerald
 - Claude 3.7 Sonnet
 - GPT-o3-mini
 
+**Code for Today**
+# https://github.com/mikerhodesideas/amsterdam
+
 ---
 layout: side-title
 align: cm-lm
@@ -412,7 +423,7 @@ color: indigo
 
 ::content::
 - Copy the 'simple search term' script from github
-- Make a copy of the sheet (in the comments)
+- Create a new sheet (sheet.new)
 - Enter your sheet URL in the script (SHEET_URL)
 - Run the script (Preview mode makes it easy to see logs)
 - Add named ranges for search terms, clicks, cost & conversions
@@ -646,6 +657,15 @@ color: emerald
    - An API key - hardcode it in the script for now
    - A prompt - Ask it to get the prompt from a named range in the sheet
    - Data - Ask it to get some data from the sheet (dummy data)
+
+---
+layout: full
+color: pink
+---
+
+<div class='border-1px v-full h-full p-5 flex items-center justify-center'>
+  <h1 class="text-8xl  text-center">Demo: Thinking Script</h1>
+</div>
 
 ---
 layout: top-title

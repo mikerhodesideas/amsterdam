@@ -9,7 +9,15 @@ SELECT
   metrics.clicks, 
   metrics.cost_micros, 
   metrics.conversions, 
-  metrics.conversions_value
+  metrics.conversions_value,
+  metrics.conversions_value_per_conversion,
+  metrics.conversions_value_per_click,
+  metrics.conversions_value_per_impression,
+  metrics.conversions_value_per_thousand_impressions,
+  metrics.conversions_value_per_thousand_clicks,
+  metrics.conversions_value_per_thousand_impressions,
+  metrics.conversions_value_per_thousand_clicks,
+  metrics.conversions_value_per_thousand_impressions,
 FROM search_term_view
 WHERE segments.date DURING LAST_30_DAYS
   AND campaign.advertising_channel_type = "SEARCH"
