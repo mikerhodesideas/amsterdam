@@ -1,9 +1,5 @@
 # Amsterdam Workshop Resources!
 
-## Zoom Call - the bonus Q&A webinar
-- Zoom link: https://us06web.zoom.us/j/82257821936
-- April 9 at 18:30 Melbourne time (pls check your local time)
-
 ## Notes
 - Note version of the slides at [slides/notes.md](slides/notes.md)
 
@@ -54,3 +50,8 @@ The following scripts are available in the `scripts` folder:
 - Get Whispr Flow (aff link): https://wisprflow.ai/?referral=MIKE72 (you & I both get a $15 credit with this link)
 - Cursor docs: https://docs.cursor.com/composer
 - Notes on using Claude 3.7: https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking
+
+
+## VIP Q&A Zoom Call - the bonus Q&A webinar for VIPs only 
+- Zoom link: https://us06web.zoom.us/j/82257821936
+- April 9 at 18:30 Melbourne time (pls check your local time)
