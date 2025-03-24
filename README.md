@@ -55,3 +55,7 @@ The following scripts are available in the `scripts` folder:
 ## VIP Q&A Zoom Call - the bonus Q&A webinar for VIPs only 
 - Zoom link: https://us06web.zoom.us/j/82257821936
 - April 9 at 18:30 Melbourne time (pls check your local time)
+
+## Build the Agent
+- Due to all the questions & interest, I've decided to bring the next cohort forward. Instead of waiting until June, the next cohort will start on April 23rd.
+- Places are very limited, if you were on the waitlist you should have received an email already. I expect this to sell out fast. If you want to join, head to https://8020agent.com/build for more info.
