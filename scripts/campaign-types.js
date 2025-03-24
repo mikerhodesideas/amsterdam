@@ -5,7 +5,7 @@
  * and exports the data to a Google Sheet.
  */
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1m9fAIeRnWOT7J2MoO9oe-FP5hE7xthbg1j2EI1cD-Ys/'; // Will create one if not provided
+const SHEET_URL = ''; // Create new sheet if not provided
 const CAMPAIGNS_TAB = 'Campaigns';
 const CAMPAIGN_TYPES_TAB = 'Campaign Types';
 

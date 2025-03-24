@@ -14,7 +14,7 @@
  */
 
 // User-configurable constants
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Rx64IjrPAO9yJNsSPgKZ-pN6ECX-M_nckn6r5Us7XNY/'; // Leave empty to create a new spreadsheet
+const SHEET_URL = ''; // Create new sheet if not provided
 const DATE_RANGE = 'LAST_30_DAYS'; // Options: 'LAST_7_DAYS', 'LAST_14_DAYS', 'LAST_30_DAYS', 'LAST_90_DAYS', etc.
 const MIN_IMPRESSIONS = 100; // Only include placements with at least this many impressions
 
@@ -49,7 +49,7 @@ function main() {
     // Initialize spreadsheet
     const ss = initializeSpreadsheet();
     if (!ss) return;
-    
+
     // Create tabs
     const sheets = {
       detailed: getOrCreateSheet(ss, TABS.DETAILED),
@@ -57,7 +57,7 @@ function main() {
       byCampaignType: getOrCreateSheet(ss, TABS.BY_CAMPAIGN_TYPE),
       byCampaignAndPlacement: getOrCreateSheet(ss, TABS.BY_CAMPAIGN_AND_PLACEMENT)
     };
-    
+
     // Fetch data
     const rows = AdsApp.search(QUERY);
     if (!rows.hasNext()) {
@@ -65,7 +65,7 @@ function main() {
       sheets.detailed.getRange(1, 1).setValue("No placement data found that meets the minimum impressions criteria.");
       return;
     }
-    
+
     // Process all rows into a simple array
     const allPlacements = [];
     while (rows.hasNext()) {
@@ -82,15 +82,15 @@ function main() {
         conversions: Number(row.metrics.conversions) || 0
       });
     }
-    
+
     // Process and output each report format
     processDetailedView(sheets.detailed, allPlacements);
     processPlacementTypeView(sheets.byPlacementType, allPlacements);
     processCampaignTypeView(sheets.byCampaignType, allPlacements);
     processCampaignAndPlacementView(sheets.byCampaignAndPlacement, allPlacements);
-    
+
     Logger.log(`Successfully processed ${allPlacements.length} placements with ${MIN_IMPRESSIONS}+ impressions`);
-    
+
   } catch (e) {
     Logger.log("Error in script: " + e);
   }
@@ -126,22 +126,22 @@ function getOrCreateSheet(ss, sheetName) {
 function processDetailedView(sheet, allPlacements) {
   // Define headers
   const headers = [
-    'Campaign', 
+    'Campaign',
     'Campaign Type',
-    'Placement Name', 
-    'Placement URL', 
-    'Placement Type', 
-    'Impressions', 
-    'Clicks', 
+    'Placement Name',
+    'Placement URL',
+    'Placement Type',
+    'Impressions',
+    'Clicks',
     'Cost',
     'CTR',
     'Conversions'
   ];
-  
+
   // Format data rows
   const rows = allPlacements.map(item => {
     const ctr = item.impressions > 0 ? item.clicks / item.impressions : 0;
-    
+
     return [
       item.campaign,
       item.campaignType,
@@ -155,7 +155,7 @@ function processDetailedView(sheet, allPlacements) {
       item.conversions.toFixed(2)
     ];
   });
-  
+
   // Write data - No summary row for detailed view
   writeDataToSheet(sheet, headers, rows);
 }
@@ -164,7 +164,7 @@ function processDetailedView(sheet, allPlacements) {
 function processPlacementTypeView(sheet, allPlacements) {
   // Group data by placement type
   const byPlacementType = {};
-  
+
   allPlacements.forEach(item => {
     const type = item.placementType || 'Unknown';
     if (!byPlacementType[type]) {
@@ -175,20 +175,20 @@ function processPlacementTypeView(sheet, allPlacements) {
         conversions: 0
       };
     }
-    
+
     byPlacementType[type].impressions += item.impressions;
     byPlacementType[type].clicks += item.clicks;
     byPlacementType[type].cost += item.cost;
     byPlacementType[type].conversions += item.conversions;
   });
-  
+
   // Convert to array and calculate metrics
   const data = Object.entries(byPlacementType).map(([type, metrics]) => {
     const ctr = metrics.impressions > 0 ? metrics.clicks / metrics.impressions : 0;
     const cpc = metrics.clicks > 0 ? metrics.cost / metrics.clicks : 0;
     const convRate = metrics.clicks > 0 ? metrics.conversions / metrics.clicks : 0;
     const costPerConv = metrics.conversions > 0 ? metrics.cost / metrics.conversions : 0;
-    
+
     return [
       type,
       metrics.impressions,
@@ -201,12 +201,12 @@ function processPlacementTypeView(sheet, allPlacements) {
       metrics.conversions > 0 ? costPerConv.toFixed(2) : '-'
     ];
   });
-  
+
   // Define headers
   const headers = [
     'Placement Type',
-    'Impressions', 
-    'Clicks', 
+    'Impressions',
+    'Clicks',
     'Cost',
     'CTR',
     'CPC',
@@ -214,17 +214,17 @@ function processPlacementTypeView(sheet, allPlacements) {
     'Conv. Rate',
     'Cost per Conv.'
   ];
-  
+
   // Write data
   writeDataToSheet(sheet, headers, data);
-  
+
   // Add summary row
   const totals = calculateTotals(allPlacements);
   const ctr = totals.impressions > 0 ? totals.clicks / totals.impressions : 0;
   const cpc = totals.clicks > 0 ? totals.cost / totals.clicks : 0;
   const convRate = totals.clicks > 0 ? totals.conversions / totals.clicks : 0;
   const costPerConv = totals.conversions > 0 ? totals.cost / totals.conversions : 0;
-  
+
   const summaryRow = [
     'TOTAL',
     totals.impressions,
@@ -236,7 +236,7 @@ function processPlacementTypeView(sheet, allPlacements) {
     (convRate * 100).toFixed(2) + '%',
     totals.conversions > 0 ? costPerConv.toFixed(2) : '-'
   ];
-  
+
   addSummaryRowToSheet(sheet, summaryRow);
 }
 
@@ -244,7 +244,7 @@ function processPlacementTypeView(sheet, allPlacements) {
 function processCampaignTypeView(sheet, allPlacements) {
   // Group data by campaign type
   const byCampaignType = {};
-  
+
   allPlacements.forEach(item => {
     const type = item.campaignType || 'Unknown';
     if (!byCampaignType[type]) {
@@ -255,20 +255,20 @@ function processCampaignTypeView(sheet, allPlacements) {
         conversions: 0
       };
     }
-    
+
     byCampaignType[type].impressions += item.impressions;
     byCampaignType[type].clicks += item.clicks;
     byCampaignType[type].cost += item.cost;
     byCampaignType[type].conversions += item.conversions;
   });
-  
+
   // Convert to array and calculate metrics
   const data = Object.entries(byCampaignType).map(([type, metrics]) => {
     const ctr = metrics.impressions > 0 ? metrics.clicks / metrics.impressions : 0;
     const cpc = metrics.clicks > 0 ? metrics.cost / metrics.clicks : 0;
     const convRate = metrics.clicks > 0 ? metrics.conversions / metrics.clicks : 0;
     const costPerConv = metrics.conversions > 0 ? metrics.cost / metrics.conversions : 0;
-    
+
     return [
       type,
       metrics.impressions,
@@ -281,12 +281,12 @@ function processCampaignTypeView(sheet, allPlacements) {
       metrics.conversions > 0 ? costPerConv.toFixed(2) : '-'
     ];
   });
-  
+
   // Define headers
   const headers = [
     'Campaign Type',
-    'Impressions', 
-    'Clicks', 
+    'Impressions',
+    'Clicks',
     'Cost',
     'CTR',
     'CPC',
@@ -294,17 +294,17 @@ function processCampaignTypeView(sheet, allPlacements) {
     'Conv. Rate',
     'Cost per Conv.'
   ];
-  
+
   // Write data
   writeDataToSheet(sheet, headers, data);
-  
+
   // Add summary row
   const totals = calculateTotals(allPlacements);
   const ctr = totals.impressions > 0 ? totals.clicks / totals.impressions : 0;
   const cpc = totals.clicks > 0 ? totals.cost / totals.clicks : 0;
   const convRate = totals.clicks > 0 ? totals.conversions / totals.clicks : 0;
   const costPerConv = totals.conversions > 0 ? totals.cost / totals.conversions : 0;
-  
+
   const summaryRow = [
     'TOTAL',
     totals.impressions,
@@ -316,7 +316,7 @@ function processCampaignTypeView(sheet, allPlacements) {
     (convRate * 100).toFixed(2) + '%',
     totals.conversions > 0 ? costPerConv.toFixed(2) : '-'
   ];
-  
+
   addSummaryRowToSheet(sheet, summaryRow);
 }
 
@@ -324,7 +324,7 @@ function processCampaignTypeView(sheet, allPlacements) {
 function processCampaignAndPlacementView(sheet, allPlacements) {
   // Group data by campaign and placement type
   const byCampaignAndPlacement = {};
-  
+
   allPlacements.forEach(item => {
     const key = `${item.campaign}|${item.placementType || 'Unknown'}`;
     if (!byCampaignAndPlacement[key]) {
@@ -337,20 +337,20 @@ function processCampaignAndPlacementView(sheet, allPlacements) {
         conversions: 0
       };
     }
-    
+
     byCampaignAndPlacement[key].impressions += item.impressions;
     byCampaignAndPlacement[key].clicks += item.clicks;
     byCampaignAndPlacement[key].cost += item.cost;
     byCampaignAndPlacement[key].conversions += item.conversions;
   });
-  
+
   // Convert to array and calculate metrics
   const data = Object.values(byCampaignAndPlacement).map(item => {
     const ctr = item.impressions > 0 ? item.clicks / item.impressions : 0;
     const cpc = item.clicks > 0 ? item.cost / item.clicks : 0;
     const convRate = item.clicks > 0 ? item.conversions / item.clicks : 0;
     const costPerConv = item.conversions > 0 ? item.cost / item.conversions : 0;
-    
+
     return [
       item.campaign,
       item.placementType,
@@ -364,13 +364,13 @@ function processCampaignAndPlacementView(sheet, allPlacements) {
       item.conversions > 0 ? costPerConv.toFixed(2) : '-'
     ];
   }).sort((a, b) => a[0].localeCompare(b[0]) || a[1].localeCompare(b[1]));
-  
+
   // Define headers
   const headers = [
     'Campaign',
     'Placement Type',
-    'Impressions', 
-    'Clicks', 
+    'Impressions',
+    'Clicks',
     'Cost',
     'CTR',
     'CPC',
@@ -378,17 +378,17 @@ function processCampaignAndPlacementView(sheet, allPlacements) {
     'Conv. Rate',
     'Cost per Conv.'
   ];
-  
+
   // Write data
   writeDataToSheet(sheet, headers, data);
-  
+
   // Add summary row
   const totals = calculateTotals(allPlacements);
   const ctr = totals.impressions > 0 ? totals.clicks / totals.impressions : 0;
   const cpc = totals.clicks > 0 ? totals.cost / totals.clicks : 0;
   const convRate = totals.clicks > 0 ? totals.conversions / totals.clicks : 0;
   const costPerConv = totals.conversions > 0 ? totals.cost / totals.conversions : 0;
-  
+
   const summaryRow = [
     'TOTAL', '',
     totals.impressions,
@@ -400,7 +400,7 @@ function processCampaignAndPlacementView(sheet, allPlacements) {
     (convRate * 100).toFixed(2) + '%',
     totals.conversions > 0 ? costPerConv.toFixed(2) : '-'
   ];
-  
+
   addSummaryRowToSheet(sheet, summaryRow);
 }
 
@@ -421,22 +421,22 @@ function calculateTotals(data) {
 function writeDataToSheet(sheet, headers, rows) {
   // Write headers
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  
+
   // Write data if available
   if (rows.length > 0) {
     sheet.getRange(2, 1, rows.length, rows[0].length).setValues(rows);
   } else {
     sheet.getRange(2, 1).setValue("No data available for this view.");
   }
-  
+
   // Format header row
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
   headerRange.setBackground('#f3f3f3');
   headerRange.setFontWeight('bold');
-  
+
   // Freeze header row
   sheet.setFrozenRows(1);
-  
+
   // Auto-size columns
   for (let i = 1; i <= headers.length; i++) {
     sheet.autoResizeColumn(i);
@@ -447,7 +447,7 @@ function addSummaryRowToSheet(sheet, summaryRow) {
   // Add summary row to sheet
   const lastRow = sheet.getLastRow() + 1;
   sheet.getRange(lastRow, 1, 1, summaryRow.length).setValues([summaryRow]);
-  
+
   // Format summary row
   sheet.getRange(lastRow, 1, 1, summaryRow.length).setBackground('#e6e6e6').setFontWeight('bold');
 }

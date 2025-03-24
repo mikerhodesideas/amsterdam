@@ -5,7 +5,7 @@
 // https://docs.google.com/spreadsheets/d/1yre6ndK9L6H2VQNNP3LLfqW8rHOT96uEZqp6zun5D8A/edit?usp=sharing
 
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1yre6ndK9L6H2VQNNP3LLfqW8rHOT96uEZqp6zun5D8A/edit?gid=0#gid=0'; // Add your sheet URL here
+const SHEET_URL = ''; // Create new sheet if not provided
 
 
 function main() {

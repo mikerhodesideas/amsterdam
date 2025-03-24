@@ -13,7 +13,7 @@
  */
 
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1aEOcIYZ0pZN85yfJftN2AtzI_0Hrx23iGuYJpFoj1HQ/'
+const SHEET_URL = ''; // Create new sheet if not provided
 const TAB_CAMPAIGN_NEGATIVES = 'Campaign Negatives';
 const TAB_ADGROUP_NEGATIVES = 'Ad Group Negatives';
 const TAB_SHARED_LISTS = 'Shared Neg. Lists';
@@ -35,47 +35,47 @@ function main() {
   } else {
     ss = SpreadsheetApp.openByUrl(SHEET_URL);
   }
-  
-  
+
+
   // Clear and prepare sheets
   prepareSheets(ss);
-  
+
   // Get and write campaign-level negative keywords
   const campaignNegatives = getCampaignNegativeKeywords();
   writeCampaignNegatives(ss, campaignNegatives);
-  
+
   // Get and write ad group-level negative keywords
   const adGroupNegatives = getAdGroupNegativeKeywords();
   writeAdGroupNegatives(ss, adGroupNegatives);
-  
+
   // Get and write shared negative keyword lists
   const { sharedLists, sharedKeywords } = getSharedNegativeKeywords();
   writeSharedLists(ss, sharedLists);
   writeSharedKeywords(ss, sharedKeywords);
-  
+
   // Calculate and write statistics
   const stats = calculateNegativeStats(campaignNegatives, adGroupNegatives, sharedLists, sharedKeywords);
   writeNegativeStats(ss, stats);
-  
+
   Logger.log("Negative keywords extraction completed.");
 }
 
 function prepareSheets(ss) {
   // Create or clear sheets for each tab
   const tabNames = [
-    TAB_CAMPAIGN_NEGATIVES, 
-    TAB_ADGROUP_NEGATIVES, 
-    TAB_SHARED_LISTS, 
+    TAB_CAMPAIGN_NEGATIVES,
+    TAB_ADGROUP_NEGATIVES,
+    TAB_SHARED_LISTS,
     TAB_SHARED_NEGATIVES,
     TAB_STATS
   ];
-  
+
   // Delete all sheets except the first one
   const sheets = ss.getSheets();
   for (let i = 1; i < sheets.length; i++) {
     ss.deleteSheet(sheets[i]);
   }
-  
+
   // Rename first sheet and create others
   sheets[0].setName(tabNames[0]);
   for (let i = 1; i < tabNames.length; i++) {
@@ -101,14 +101,14 @@ function getCampaignNegativeKeywords() {
     campaign_criterion.type = 'KEYWORD'
   ORDER BY campaign.name ASC
   `;
-  
+
   // Execute the query and process results
   const campaignNegativeIterator = AdsApp.search(campaignNegativeQuery);
-  
+
   const negativeKeywords = [];
   while (campaignNegativeIterator.hasNext()) {
     const row = campaignNegativeIterator.next();
-    
+
     // Extract the values from the row
     try {
       negativeKeywords.push({
@@ -123,7 +123,7 @@ function getCampaignNegativeKeywords() {
       Logger.log("Error processing campaign negative keyword: " + e);
     }
   }
-  
+
   return negativeKeywords;
 }
 
@@ -146,14 +146,14 @@ function getAdGroupNegativeKeywords() {
     ad_group_criterion.type = 'KEYWORD'
   ORDER BY campaign.name ASC, ad_group.name ASC
   `;
-  
+
   // Execute the query and process results
   const adGroupNegativeIterator = AdsApp.search(adGroupNegativeQuery);
-  
+
   const negativeKeywords = [];
   while (adGroupNegativeIterator.hasNext()) {
     const row = adGroupNegativeIterator.next();
-    
+
     // Extract the values from the row
     try {
       negativeKeywords.push({
@@ -169,26 +169,26 @@ function getAdGroupNegativeKeywords() {
       Logger.log("Error processing ad group negative keyword: " + e);
     }
   }
-  
+
   return negativeKeywords;
 }
 
 function getSharedNegativeKeywords() {
   // Get all shared negative keyword lists
   const sharedSets = AdsApp.negativeKeywordLists().get();
-  
+
   const sharedLists = [];
   const sharedKeywords = [];
-  
+
   while (sharedSets.hasNext()) {
     const sharedSet = sharedSets.next();
     const sharedSetId = sharedSet.getId();
     const sharedSetName = sharedSet.getName();
-    
+
     // Get all campaigns that use this shared set
     const campaignsWithList = [];
     const campaignIterator = sharedSet.campaigns().get();
-    
+
     while (campaignIterator.hasNext()) {
       const campaign = campaignIterator.next();
       campaignsWithList.push({
@@ -196,7 +196,7 @@ function getSharedNegativeKeywords() {
         campaignName: campaign.getName()
       });
     }
-    
+
     // Add the shared list to our results
     sharedLists.push({
       listId: sharedSetId,
@@ -204,10 +204,10 @@ function getSharedNegativeKeywords() {
       campaignCount: campaignsWithList.length,
       campaigns: campaignsWithList
     });
-    
+
     // Get all negative keywords in this shared list
     const negKeywordIterator = sharedSet.negativeKeywords().get();
-    
+
     while (negKeywordIterator.hasNext()) {
       const negKeyword = negKeywordIterator.next();
       sharedKeywords.push({
@@ -218,27 +218,27 @@ function getSharedNegativeKeywords() {
       });
     }
   }
-  
+
   return { sharedLists, sharedKeywords };
 }
 
 function writeCampaignNegatives(ss, campaignNegatives) {
   const sheet = ss.getSheetByName(TAB_CAMPAIGN_NEGATIVES);
-  
+
   // Write headers
   const headers = [
-    'Campaign ID', 
-    'Campaign Name', 
-    'Campaign Status', 
-    'Negative Keyword', 
-    'Match Type', 
+    'Campaign ID',
+    'Campaign Name',
+    'Campaign Status',
+    'Negative Keyword',
+    'Match Type',
     'Status'
   ];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  
+
   // Format headers
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-  
+
   // Write data
   if (campaignNegatives.length > 0) {
     const rows = campaignNegatives.map(neg => [
@@ -251,7 +251,7 @@ function writeCampaignNegatives(ss, campaignNegatives) {
     ]);
     sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
   }
-  
+
   // Auto-resize columns
   for (let i = 1; i <= headers.length; i++) {
     sheet.autoResizeColumn(i);
@@ -260,22 +260,22 @@ function writeCampaignNegatives(ss, campaignNegatives) {
 
 function writeAdGroupNegatives(ss, adGroupNegatives) {
   const sheet = ss.getSheetByName(TAB_ADGROUP_NEGATIVES);
-  
+
   // Write headers
   const headers = [
-    'Campaign ID', 
-    'Campaign Name', 
-    'Ad Group ID', 
-    'Ad Group Name', 
-    'Negative Keyword', 
-    'Match Type', 
+    'Campaign ID',
+    'Campaign Name',
+    'Ad Group ID',
+    'Ad Group Name',
+    'Negative Keyword',
+    'Match Type',
     'Status'
   ];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  
+
   // Format headers
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-  
+
   // Write data
   if (adGroupNegatives.length > 0) {
     const rows = adGroupNegatives.map(neg => [
@@ -289,7 +289,7 @@ function writeAdGroupNegatives(ss, adGroupNegatives) {
     ]);
     sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
   }
-  
+
   // Auto-resize columns
   for (let i = 1; i <= headers.length; i++) {
     sheet.autoResizeColumn(i);
@@ -298,18 +298,18 @@ function writeAdGroupNegatives(ss, adGroupNegatives) {
 
 function writeSharedLists(ss, sharedLists) {
   const sheet = ss.getSheetByName(TAB_SHARED_LISTS);
-  
+
   // Write headers
   const headers = [
-    'List ID', 
-    'List Name', 
+    'List ID',
+    'List Name',
     'Campaign Count'
   ];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  
+
   // Format headers
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-  
+
   // Write data
   if (sharedLists.length > 0) {
     const rows = sharedLists.map(list => [
@@ -319,7 +319,7 @@ function writeSharedLists(ss, sharedLists) {
     ]);
     sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
   }
-  
+
   // Auto-resize columns
   for (let i = 1; i <= headers.length; i++) {
     sheet.autoResizeColumn(i);
@@ -328,19 +328,19 @@ function writeSharedLists(ss, sharedLists) {
 
 function writeSharedKeywords(ss, sharedKeywords) {
   const sheet = ss.getSheetByName(TAB_SHARED_NEGATIVES);
-  
+
   // Write headers
   const headers = [
-    'List ID', 
-    'List Name', 
-    'Negative Keyword', 
+    'List ID',
+    'List Name',
+    'Negative Keyword',
     'Match Type'
   ];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-  
+
   // Format headers
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-  
+
   // Write data
   if (sharedKeywords.length > 0) {
     const rows = sharedKeywords.map(neg => [
@@ -351,7 +351,7 @@ function writeSharedKeywords(ss, sharedKeywords) {
     ]);
     sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
   }
-  
+
   // Auto-resize columns
   for (let i = 1; i <= headers.length; i++) {
     sheet.autoResizeColumn(i);
@@ -366,7 +366,7 @@ function calculateNegativeStats(campaignNegatives, adGroupNegatives, sharedLists
     phraseCount: campaignNegatives.filter(n => n.matchType === 'PHRASE').length,
     broadCount: campaignNegatives.filter(n => n.matchType === 'BROAD').length
   };
-  
+
   // Calculate ad group-level stats
   const adGroupStats = {
     totalKeywords: adGroupNegatives.length,
@@ -374,7 +374,7 @@ function calculateNegativeStats(campaignNegatives, adGroupNegatives, sharedLists
     phraseCount: adGroupNegatives.filter(n => n.matchType === 'PHRASE').length,
     broadCount: adGroupNegatives.filter(n => n.matchType === 'BROAD').length
   };
-  
+
   // Calculate shared list stats
   const sharedListStats = {
     totalLists: sharedLists.length,
@@ -383,32 +383,32 @@ function calculateNegativeStats(campaignNegatives, adGroupNegatives, sharedLists
     phraseCount: sharedKeywords.filter(n => n.matchType === 'PHRASE').length,
     broadCount: sharedKeywords.filter(n => n.matchType === 'BROAD').length
   };
-  
+
   // Count number of campaigns using each match type
   const campaignsUsingExact = new Set(campaignNegatives.filter(n => n.matchType === 'EXACT').map(n => n.campaignId)).size;
   const campaignsUsingPhrase = new Set(campaignNegatives.filter(n => n.matchType === 'PHRASE').map(n => n.campaignId)).size;
   const campaignsUsingBroad = new Set(campaignNegatives.filter(n => n.matchType === 'BROAD').map(n => n.campaignId)).size;
-  
+
   // Count campaigns with any negative keywords
   const campaignsWithNegatives = new Set(campaignNegatives.map(n => n.campaignId)).size;
-  
+
   // Get total number of campaigns
   const campaignQuery = `
   SELECT
     campaign.id
   FROM campaign
   `;
-  
+
   const campaignIterator = AdsApp.search(campaignQuery);
   let totalCampaignCount = 0;
   while (campaignIterator.hasNext()) {
     campaignIterator.next();
     totalCampaignCount++;
   }
-  
+
   // Calculate overall stats
   const totalNegatives = campaignStats.totalKeywords + adGroupStats.totalKeywords + sharedListStats.totalKeywords;
-  
+
   return {
     totalCampaigns: totalCampaignCount,
     campaignsWithNegatives,
@@ -424,7 +424,7 @@ function calculateNegativeStats(campaignNegatives, adGroupNegatives, sharedLists
 
 function writeNegativeStats(ss, stats) {
   const sheet = ss.getSheetByName(TAB_STATS);
-  
+
   // Prepare data rows
   const data = [
     ['ACCOUNT OVERVIEW', ''],
@@ -456,10 +456,10 @@ function writeNegativeStats(ss, stats) {
     ['Phrase Match', stats.sharedListStats.phraseCount],
     ['Broad Match', stats.sharedListStats.broadCount]
   ];
-  
+
   // Write data
   sheet.getRange(1, 1, data.length, 2).setValues(data);
-  
+
   // Format headers and sections
   const sectionRows = [0, 7, 10, 15, 20];
   for (const row of sectionRows) {
@@ -467,7 +467,7 @@ function writeNegativeStats(ss, stats) {
       sheet.getRange(row + 1, 1, 1, 2).setFontWeight('bold');
     }
   }
-  
+
   // Auto-resize columns
   sheet.autoResizeColumn(1);
   sheet.autoResizeColumn(2);

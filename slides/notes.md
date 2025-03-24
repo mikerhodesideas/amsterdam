@@ -262,5 +262,8 @@
 - Tactics are great, Strategies are better
 - It's a great time to build!
 
+## Confidence
+- Watch https://www.youtube.com/watch?v=wBlJ5HbFpYQ
+
 ## Final Thoughts
 Thank you for attending! Please share what you build and any feedback you have.

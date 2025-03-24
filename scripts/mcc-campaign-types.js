@@ -5,7 +5,7 @@
  * and exports the aggregated data to a Google Sheet.
  */
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1sQw2S2xPykaCVK2Cwh35i53tv4NbHFe3QmZ4WPIFMx0/edit';
+const SHEET_URL = ''; // Create new sheet if not provided
 const TAB = 'Campaign Types';
 
 const QUERY = `
