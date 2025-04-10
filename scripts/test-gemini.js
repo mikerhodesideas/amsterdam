@@ -5,7 +5,7 @@ const PROMPT = "What are google ads scripts?"
 function main() {
     try {
         let start = new Date();
-        let model = "gemini-1.5-pro" // Use gemini-pro for best results
+        let model = "gemini-2.0-flash" // Use gemini-pro for best results
         let output = generateTextGemini(PROMPT, API_KEY, model); // output
         Logger.log('Text output: ' + output);
 
